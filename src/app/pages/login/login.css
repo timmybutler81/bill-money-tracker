@@ -1,0 +1,19 @@
+.login-wrap {
+  max-width: 520px;
+}
+
+.login-card {
+  margin-top: 12px;
+}
+
+.muted {
+  color: var(--muted);
+  margin-top: 0;
+}
+
+.google-btn {
+  margin-top: 12px;
+  background: var(--primary) !important;
+  color: white !important;
+  border-radius: 12px;
+}

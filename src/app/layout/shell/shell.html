@@ -1,0 +1,91 @@
+<mat-sidenav-container class="shell-container">
+  <mat-sidenav
+    #drawer
+    class="shell-sidenav"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [opened]="!(isHandset$ | async)"
+  >
+    <div class="brand">
+      <div class="brand-title">Bill Money Tracker</div>
+    </div>
+
+    <mat-nav-list>
+      <a mat-list-item routerLink="/dashboard" routerLinkActive="active-link">
+        <mat-icon>dashboard</mat-icon>
+        <span>Dashboard</span>
+      </a>
+
+      <a mat-list-item routerLink="/transactions" routerLinkActive="active-link">
+        <mat-icon>receipt_long</mat-icon>
+        <span>Transactions</span>
+      </a>
+
+      <a mat-list-item routerLink="/categories" routerLinkActive="active-link">
+        <mat-icon>category</mat-icon>
+        <span>Categories</span>
+      </a>
+
+      <a mat-list-item routerLink="/recurring-bills" routerLinkActive="active-link">
+        <mat-icon>autorenew</mat-icon>
+        <span>Recurring Bills</span>
+      </a>
+
+      <a mat-list-item routerLink="/reports" routerLinkActive="active-link">
+        <mat-icon>bar_chart</mat-icon>
+        <span>Reports</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="shell-content">
+    <mat-toolbar class="shell-toolbar">
+      <button mat-icon-button (click)="drawer.toggle()" *ngIf="isHandset$ | async">
+        <mat-icon>menu</mat-icon>
+      </button>
+
+      <span class="toolbar-title">Money Tracker</span>
+      <span class="spacer"></span>
+
+      <button class="avatar-btn" [matMenuTriggerFor]="userMenu" aria-label="User menu">
+        <ng-container *ngIf="user$ | async as user">
+        <img *ngIf="user.photoURL; else initials" class="avatar-img" [src]="user.photoURL" alt="User avatar" />
+        <ng-template #initials>
+        <div class="avatar-fallback">
+          {{ (user.displayName || user.email || '?').charAt(0).toUpperCase() }}
+        </div>
+        </ng-template>
+        </ng-container>
+
+      <ng-container *ngIf="!(user$ | async)">
+        <mat-icon>account_circle</mat-icon>
+      </ng-container>
+      </button>
+
+      <mat-menu #userMenu="matMenu">
+        <ng-container *ngIf="user$ | async as user; else loggedOut">
+          <div class="user-box">
+          <div class="user-name">{{ user.displayName }}</div>
+          <div class="user-email">{{ user.email }}</div>
+      </div>
+
+      <button mat-menu-item (click)="auth.logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Logout</span>
+        </button>
+      </ng-container>
+
+      <ng-template #loggedOut>
+        <button mat-menu-item routerLink="/login">
+          <mat-icon>login</mat-icon>
+          <span>Login</span>
+        </button>
+      </ng-template>
+    </mat-menu>
+    </mat-toolbar>
+
+    <div class="page">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
