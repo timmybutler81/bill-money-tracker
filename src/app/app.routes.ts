@@ -4,7 +4,7 @@ import { authGuard } from './auth/auth.guard';
 import { Shell } from './layout/shell/shell';
 import { Login } from './pages/login/login';
 import { Dashboard } from './pages/dashboard/dashboard';
-import { Transactions } from './pages/transactions/transactions';
+import { TransactionPage } from './pages/transactions/transactions.page';
 import { Categories } from './pages/categories/categories';
 import { RecurringBills } from './pages/recurring-bills/recurring-bills';
 import { Reports } from './pages/reports/reports';
@@ -18,7 +18,7 @@ export const routes: Routes = [
     canActivateChild: [authGuard],
     children: [
       { path: 'dashboard', component: Dashboard },
-      { path: 'transactions', component: Transactions },
+      { path: 'transactions', component: TransactionPage },
       { path: 'categories', component: Categories },
       { path: 'recurring-bills', component: RecurringBills },
       { path: 'reports', component: Reports },
