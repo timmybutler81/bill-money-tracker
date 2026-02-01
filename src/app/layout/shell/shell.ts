@@ -60,6 +60,16 @@ export class Shell {
   });
 }
 
+onAvatarError(evt: Event) {
+  const img = evt.target as HTMLImageElement;
+  img.style.display = 'none';
+}
+
+logout() {
+  this.auth.logout();
+}
+
+
 async onLogout() {
   await this.auth.logout();
   await this.router.navigateByUrl('/login');

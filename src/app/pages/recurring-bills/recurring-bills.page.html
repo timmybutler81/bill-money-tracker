@@ -1,0 +1,111 @@
+<div class="page stack">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Recurring Bills</h1>
+      <p class="page-subtitle">Manage subscriptions and recurring expenses.</p>
+    </div>
+  </div>
+
+  <div class="pills">
+    <div class="pill">
+      <span>Count</span>
+      <strong>{{ bills.length }}</strong>
+    </div>
+    <div class="pill">
+      <span>Total Monthly</span>
+      <strong>{{ monthlyTotal() | currency }}</strong>
+    </div>
+  </div>
+
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>Add recurring bill</mat-panel-title>
+        <mat-panel-description>Tap to open</mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <div class="form-grid">
+        <mat-form-field appearance="outline" class="span-2">
+          <mat-label>Bill name</mat-label>
+          <input matInput [(ngModel)]="form.name" name="name" placeholder="Netflix" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="span-2">
+          <mat-label>Amount</mat-label>
+          <input matInput type="number" step="0.01" [(ngModel)]="form.amount" name="amount" placeholder="0.00" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="span-2">
+          <mat-label>Category</mat-label>
+          <mat-select [(ngModel)]="form.categoryId" name="categoryId">
+            <mat-option *ngFor="let t of categories" [value]="t.id">
+              {{ t.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="span-2">
+          <mat-label>Frequency</mat-label>
+          <mat-select [(ngModel)]="form.frequency" name="frequency">
+            <mat-option *ngFor="let b of billFrequency" [value]="b.value">
+              {{ b.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="span-2">
+          <mat-label>Start date</mat-label>
+          <input matInput type="date" [(ngModel)]="form.startDate" name="startDate" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="span-2">
+          <mat-label>Next due date</mat-label>
+          <input matInput type="date" [(ngModel)]="form.nextDueDate" name="nextDueDate" />
+        </mat-form-field>
+
+        <div class="span-4 row-between">
+          <span></span>
+          <button mat-flat-button color="primary" (click)="add()">Add</button>
+        </div>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <mat-card>
+    <div class="section-title">All recurring bills</div>
+
+    <div class="table-wrap">
+    <table class="table" *ngIf="bills.length > 0; else empty">
+      <thead>
+        <tr>
+          <th>Bill name</th>
+          <th>Category</th>
+          <th>Frequency</th>
+          <th>Next due</th>
+          <th class="text-right">Amount</th>
+          <th>Active</th>
+          <th class="text-right">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let c of bills; trackBy: trackById">
+          <td>{{ c.name }}</td>
+          <td>{{ categoryName(c.categoryId) }}</td>
+          <td>{{ c.frequency }}</td>
+          <td>{{ c.nextDueDate }}</td>
+          <td class="text-right">{{ c.amount | currency }}</td>
+          <td>{{ c.active ? 'Yes' : 'No' }}</td>
+          <td class="text-right">
+            <button mat-stroked-button color="warn" (click)="delete(c.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <ng-template #empty>
+      <p class="text-muted">No recurring bills yet.</p>
+    </ng-template>
+  </mat-card>
+</div>

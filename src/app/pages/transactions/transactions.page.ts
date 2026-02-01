@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 import { Transaction } from '../../model/Transaction';
 import { Category } from '../../model/Category';
@@ -29,7 +30,7 @@ type PaymentMethodOption = { value: Transaction['paymentMethod']; label: string 
     MatSelectModule,
     MatCheckboxModule,
     MatButtonModule,
-  ],
+    MatExpansionModule,],
   templateUrl: './transactions.page.html',
   styleUrls: ['./transactions.page.css'],
 })

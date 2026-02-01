@@ -1,0 +1,81 @@
+<div class="page stack">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Categories</h1>
+      <p class="page-subtitle">Create categories used for transactions and bills.</p>
+    </div>
+  </div>
+
+  <div class="pills">
+    <div class="pill">
+      <span>Total</span>
+      <strong>{{ categories.length }}</strong>
+    </div>
+  </div>
+
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>Add category</mat-panel-title>
+        <mat-panel-description>Tap to open</mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <div class="form-grid">
+        <mat-form-field appearance="outline" class="span-2">
+          <mat-label>Name</mat-label>
+          <input matInput [(ngModel)]="form.name" name="name" placeholder="Groceries" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="span-2">
+          <mat-label>Alias (optional)</mat-label>
+          <input matInput [(ngModel)]="form.alias" name="alias" placeholder="food" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="span-2">
+          <mat-label>Category Type</mat-label>
+          <mat-select [(ngModel)]="form.typeId" name="typeId">
+            <mat-option *ngFor="let t of categoryTypes" [value]="t.id">
+              {{ t.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="span-2 row-end">
+          <button mat-flat-button color="primary" (click)="add()">Add</button>
+        </div>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <mat-card>
+    <div class="section-title">All categories</div>
+
+    <div class="table-wrap">
+    <table class="table" *ngIf="categories.length > 0; else empty">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Alias</th>
+          <th>Type</th>
+          <th class="text-right">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let c of categories; trackBy: trackById">
+          <td>{{ c.name }}</td>
+          <td>{{ c.alias || '-' }}</td>
+          <td>{{ typeName(c.typeId) }}</td>
+          <td class="text-right">
+            <button mat-stroked-button color="warn" (click)="delete(c.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <ng-template #empty>
+      <p class="text-muted">No categories yet.</p>
+    </ng-template>
+  </mat-card>
+</div>

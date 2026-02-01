@@ -5,8 +5,8 @@ import { Shell } from './layout/shell/shell';
 import { Login } from './pages/login/login';
 import { Dashboard } from './pages/dashboard/dashboard';
 import { TransactionPage } from './pages/transactions/transactions.page';
-import { Categories } from './pages/categories/categories';
-import { RecurringBills } from './pages/recurring-bills/recurring-bills';
+import { CategoriesPage } from './pages/categories/categories.page';
+import { RecurringBillsPage } from './pages/recurring-bills/recurring-bills.page';
 import { Reports } from './pages/reports/reports';
 
 export const routes: Routes = [
@@ -19,8 +19,8 @@ export const routes: Routes = [
     children: [
       { path: 'dashboard', component: Dashboard },
       { path: 'transactions', component: TransactionPage },
-      { path: 'categories', component: Categories },
-      { path: 'recurring-bills', component: RecurringBills },
+      { path: 'categories', component: CategoriesPage },
+      { path: 'recurring-bills', component: RecurringBillsPage },
       { path: 'reports', component: Reports },
 
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },

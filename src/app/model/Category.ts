@@ -4,6 +4,6 @@ export interface Category extends AuditFields {
     id: string;
     userId: string;
     name: string;
-    alias: string;
+    alias?: string;
     typeId: string
 }

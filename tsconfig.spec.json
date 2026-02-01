@@ -11,5 +11,9 @@
   "include": [
     "src/**/*.d.ts",
     "src/**/*.spec.ts"
+<<<<<<< HEAD
   ]
+=======
+, "src/app/pages/categories/categories.page.spec.ts", "src/app/pages/recurring-bills/recurring-bills.page.spec.ts"  ]
+>>>>>>> 4b4ac72 (Full restructure and added transactions, recurr-billing, categories)
 }

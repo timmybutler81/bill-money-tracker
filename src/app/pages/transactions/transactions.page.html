@@ -1,4 +1,4 @@
-<div class="page">
+<div class="page stack">
   <div class="page-header">
     <div>
       <h1 class="page-title">Transactions</h1>
@@ -17,72 +17,75 @@
     </div>
   </div>
 
-  <!-- Add Transaction -->
-  <mat-card>
-    <div class="section-title">Add transaction</div>
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>Add transaction</mat-panel-title>
+        <mat-panel-description>Tap to open</mat-panel-description>
+      </mat-expansion-panel-header>
 
-    <div class="form-grid">
-      <mat-form-field appearance="outline" class="span-1">
-        <mat-label>Date</mat-label>
-        <!-- Keeping native input for now (simple). Can switch to MatDatepicker later. -->
-        <input matInput type="date" [(ngModel)]="form.date" name="date" />
-      </mat-form-field>
+      <div class="form-grid">
+        <mat-form-field appearance="outline" class="span-1">
+          <mat-label>Date</mat-label>
+          <input matInput type="date" [(ngModel)]="form.date" name="date" />
+        </mat-form-field>
 
-      <mat-form-field appearance="outline" class="span-1">
-        <mat-label>Amount</mat-label>
-        <input
-          matInput
-          type="number"
-          step="0.01"
-          [(ngModel)]="form.amount"
-          name="amount"
-        />
-      </mat-form-field>
+        <mat-form-field appearance="outline" class="span-1">
+          <mat-label>Amount</mat-label>
+          <input
+            matInput
+            type="number"
+            step="0.01"
+            [(ngModel)]="form.amount"
+            name="amount"
+          />
+        </mat-form-field>
 
-      <mat-form-field appearance="outline" class="span-1">
-        <mat-label>Category</mat-label>
-        <mat-select [(ngModel)]="form.categoryId" name="categoryId">
-          <mat-option *ngFor="let c of categories" [value]="c.id">
-            {{ c.name }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+        <mat-form-field appearance="outline" class="span-1">
+          <mat-label>Category</mat-label>
+          <mat-select [(ngModel)]="form.categoryId" name="categoryId">
+            <mat-option *ngFor="let c of categories" [value]="c.id">
+              {{ c.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
 
-      <mat-form-field appearance="outline" class="span-1">
-        <mat-label>Payment method</mat-label>
-        <mat-select [(ngModel)]="form.paymentMethod" name="paymentMethod">
-          <mat-option *ngFor="let pm of paymentMethods" [value]="pm.value">
-            {{ pm.label }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+        <mat-form-field appearance="outline" class="span-1">
+          <mat-label>Payment method</mat-label>
+          <mat-select [(ngModel)]="form.paymentMethod" name="paymentMethod">
+            <mat-option *ngFor="let pm of paymentMethods" [value]="pm.value">
+              {{ pm.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
 
-      <mat-form-field appearance="outline" class="span-4">
-        <mat-label>Description</mat-label>
-        <input
-          matInput
-          [(ngModel)]="form.description"
-          name="description"
-          placeholder="Optional note"
-        />
-      </mat-form-field>
+        <mat-form-field appearance="outline" class="span-4">
+          <mat-label>Description</mat-label>
+          <input
+            matInput
+            [(ngModel)]="form.description"
+            name="description"
+            placeholder="Optional note"
+          />
+        </mat-form-field>
 
-      <div class="span-4">
-        <mat-checkbox [(ngModel)]="form.isRecurringInstance" name="isRecurringInstance">
-          This is a recurring instance
-        </mat-checkbox>
+        <div class="span-4">
+          <mat-checkbox [(ngModel)]="form.isRecurringInstance" name="isRecurringInstance">
+            This is a recurring instance
+          </mat-checkbox>
+        </div>
       </div>
-    </div>
 
-    <button mat-flat-button color="primary" (click)="add()">
-      Add
-    </button>
-  </mat-card>
+      <div class="row-end">
+        <button mat-flat-button color="primary" (click)="add()">Add</button>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
 
-  <!-- Recent Transactions -->
-  <mat-card style="margin-top: 12px;">
+  <mat-card>
     <div class="section-title">Recent</div>
 
+    <div class="table-wrap">
     <table class="table" *ngIf="transactions.length > 0; else empty">
       <thead>
         <tr>
@@ -112,6 +115,7 @@
         </tr>
       </tbody>
     </table>
+    </div>
 
     <ng-template #empty>
       <p class="text-muted">No transactions yet.</p>
