@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive, RouterOutlet, Router } from '@angular/router';
 import { BreakpointObserver, Breakpoints, LayoutModule } from '@angular/cdk/layout';
-import { map, Observable, shareReplay } from 'rxjs';
+import { map, Observable, shareReplay, firstValueFrom } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs';
 import { AuthService } from '../../auth/auth.service';
@@ -14,6 +14,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatSidenav } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-shell',
@@ -36,6 +37,7 @@ import { MatMenuModule } from '@angular/material/menu';
 })
 
 export class Shell {
+  @ViewChild('drawer') drawer!: MatSidenav;
   isHandset$!: Observable<boolean>;
   user$!: Observable<User | null>;
 
@@ -69,10 +71,16 @@ logout() {
   this.auth.logout();
 }
 
-
 async onLogout() {
   await this.auth.logout();
   await this.router.navigateByUrl('/login');
+}
+
+async closeIfHandset(): Promise<void> {
+  const isHandset = await firstValueFrom(this.isHandset$);
+  if (isHandset) {
+    this.drawer.close();
+  }
 }
 
 }
