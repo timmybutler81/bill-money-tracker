@@ -1,4 +1,3 @@
-// app/service/TransactionService.ts
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Transaction } from '../model/Transaction';
@@ -10,10 +9,8 @@ export class TransactionService {
     [...TRANSACTIONS_MOCK]
   );
 
-  /** Observable stream for components to subscribe to */
   transactions$: Observable<Transaction[]> = this.transactionsSubject.asObservable();
 
-  /** Snapshot getter (sometimes handy) */
   getTransactions(): Transaction[] {
     return this.transactionsSubject.value;
   }

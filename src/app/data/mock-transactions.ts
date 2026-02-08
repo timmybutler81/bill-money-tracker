@@ -7,7 +7,7 @@ export const TRANSACTIONS_MOCK: Transaction[] = [
     userId: MOCK_USER_ID,
     categoryId: 'cat_groceries',
     amount: 42.17,
-    date: '2026-02-01',
+    date: '2026-01-01',
     description: 'Grocery run',
     paymentMethod: 'debit',
     isRecurringInstance: false,

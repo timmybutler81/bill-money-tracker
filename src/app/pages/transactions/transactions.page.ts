@@ -12,8 +12,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
 
 import { Transaction } from '../../model/Transaction';
 import { Category } from '../../model/Category';
+import { CategoryService } from '../../service/CategoryService';
 import { TransactionService } from '../../service/TransactionService';
-import { CATEGORIES_MOCK } from '../../data/mock-categories';
 
 type PaymentMethodOption = { value: Transaction['paymentMethod']; label: string };
 
@@ -30,13 +30,31 @@ type PaymentMethodOption = { value: Transaction['paymentMethod']; label: string 
     MatSelectModule,
     MatCheckboxModule,
     MatButtonModule,
-    MatExpansionModule,],
+    MatExpansionModule,
+  ],
   templateUrl: './transactions.page.html',
   styleUrls: ['./transactions.page.css'],
 })
 export class TransactionPage implements OnInit {
+  // Source data
   transactions: Transaction[] = [];
-  categories: Category[] = CATEGORIES_MOCK;
+  categories: Category[] = [];
+
+  // Filtered view
+  filteredTransactions: Transaction[] = [];
+
+  // Pills (based on filtered view)
+  incomeTotal = 0;
+  expenseTotal = 0;
+  netBalance = 0;
+
+  // Filters (template-driven)
+  filters = {
+    startDate: '' as string,   // ISO YYYY-MM-DD (from <input type="date">)
+    endDate: '' as string,     // ISO YYYY-MM-DD
+    categoryId: '' as string,  // '' = All
+    search: '' as string,      // description + category name
+  };
 
   paymentMethods: PaymentMethodOption[] = [
     { value: 'debit', label: 'Debit' },
@@ -46,28 +64,49 @@ export class TransactionPage implements OnInit {
 
   private readonly userId = 'TODO_FROM_AUTH';
 
+  // Add Transaction form (keep ISO for <input type="date">)
   form = {
     date: this.todayIso(),
     amount: null as number | null,
-    categoryId: this.categories[0]?.id ?? '',
+    categoryId: '',
     paymentMethod: 'debit' as Transaction['paymentMethod'],
     isRecurringInstance: false,
     description: '',
   };
 
-  constructor(private txService: TransactionService) {}
+  constructor(
+    private txService: TransactionService,
+    private categoryService: CategoryService
+  ) {}
 
   ngOnInit(): void {
-    this.txService.transactions$.subscribe((rows) => {
-      this.transactions = [...rows].sort((a, b) => {
-        const byDate = b.date.localeCompare(a.date);
-        if (byDate !== 0) return byDate;
+    // Categories
+    this.categories = this.categoryService.getSnapshot();
+    this.ensureDefaultCategorySelected();
 
-        const ac = a.createdAt ?? '';
-        const bc = b.createdAt ?? '';
-        return bc.localeCompare(ac);
-      });
+    this.categoryService.categories$.subscribe((cats) => {
+      this.categories = cats;
+      this.ensureDefaultCategorySelected();
+      this.applyFiltersAndRecompute();
     });
+
+    // Transactions
+    this.transactions = this.sortTransactions(this.normalizeDates(this.txService.getTransactions()));
+    this.applyFiltersAndRecompute();
+
+    this.txService.transactions$.subscribe((rows) => {
+      this.transactions = this.sortTransactions(this.normalizeDates(rows));
+      this.applyFiltersAndRecompute();
+    });
+  }
+
+  onFiltersChanged(): void {
+    this.applyFiltersAndRecompute();
+  }
+
+  clearFilters(): void {
+    this.filters = { startDate: '', endDate: '', categoryId: '', search: '' };
+    this.applyFiltersAndRecompute();
   }
 
   add(): void {
@@ -83,7 +122,7 @@ export class TransactionPage implements OnInit {
       userId: this.userId,
       categoryId: this.form.categoryId,
       amount: Number(this.form.amount),
-      date: this.form.date,
+      date: this.form.date, // ISO YYYY-MM-DD
       description: this.form.description?.trim() || undefined,
       paymentMethod: this.form.paymentMethod,
       isRecurringInstance: this.form.isRecurringInstance,
@@ -110,8 +149,122 @@ export class TransactionPage implements OnInit {
     return t.id;
   }
 
+  // Total based on filtered view (so pills match filters)
   total(): number {
-    return this.transactions.reduce((sum, t) => sum + t.amount, 0);
+    return this.filteredTransactions.reduce((sum, t) => sum + t.amount, 0);
+  }
+
+  formatMoney(n: number): string {
+    return n.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+  }
+
+  // -------------------------
+  // Filtering + Pills
+  // -------------------------
+  private applyFiltersAndRecompute(): void {
+    const start = this.filters.startDate?.trim() || '';
+    const end = this.filters.endDate?.trim() || '';
+    const categoryId = this.filters.categoryId?.trim() || '';
+    const q = (this.filters.search ?? '').trim().toLowerCase();
+
+    this.filteredTransactions = this.transactions.filter((t) => {
+      // Dates are ISO internally, so string compare is safe
+      if (start && t.date < start) return false;
+      if (end && t.date > end) return false;
+
+      if (categoryId && t.categoryId !== categoryId) return false;
+
+      if (q) {
+        const desc = (t.description ?? '').toLowerCase();
+        const cat = this.categoryName(t.categoryId).toLowerCase();
+        if (!desc.includes(q) && !cat.includes(q)) return false;
+      }
+
+      return true;
+    });
+
+    this.recomputePills();
+  }
+
+  private recomputePills(): void {
+    const isIncome = (categoryId: string): boolean => {
+      const cat = this.categories.find((c) => c.id === categoryId);
+      return cat?.typeId === 'ct_income';
+    };
+
+    const base = this.filteredTransactions;
+
+    this.incomeTotal = base
+      .filter((t) => isIncome(t.categoryId))
+      .reduce((sum, t) => sum + t.amount, 0);
+
+    this.expenseTotal = base
+      .filter((t) => !isIncome(t.categoryId))
+      .reduce((sum, t) => sum + t.amount, 0);
+
+    this.netBalance = this.incomeTotal - this.expenseTotal;
+  }
+
+  // -------------------------
+  // Date normalization (for mocks / mixed formats)
+  // -------------------------
+  private normalizeDates(rows: Transaction[]): Transaction[] {
+    return rows.map((t) => {
+      const iso = this.toIsoDay(t.date);
+      return iso ? { ...t, date: iso } : t;
+    });
+  }
+
+  /**
+   * Accepts:
+   *  - ISO: YYYY-MM-DD
+   *  - US:  MM/DD/YYYY
+   *  - Also tolerates: MM-DD-YYYY (your current mock has this)
+   * Returns ISO YYYY-MM-DD or '' if invalid.
+   */
+  private toIsoDay(value: string): string {
+    const v = (value ?? '').trim();
+    if (!v) return '';
+
+    // Already ISO?
+    if (/^\d{4}-\d{2}-\d{2}$/.test(v)) return v;
+
+    // MM/DD/YYYY
+    let m = v.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+    if (m) {
+      const mm = m[1], dd = m[2], yyyy = m[3];
+      return `${yyyy}-${mm}-${dd}`;
+    }
+
+    // MM-DD-YYYY (tolerate legacy mock)
+    m = v.match(/^(\d{2})-(\d{2})-(\d{4})$/);
+    if (m) {
+      const mm = m[1], dd = m[2], yyyy = m[3];
+      return `${yyyy}-${mm}-${dd}`;
+    }
+
+    // Unknown format -> leave it alone (but it may not filter/sort right)
+    return '';
+  }
+
+  // -------------------------
+  // Helpers
+  // -------------------------
+  private sortTransactions(rows: Transaction[]): Transaction[] {
+    return [...rows].sort((a, b) => {
+      const byDate = b.date.localeCompare(a.date);
+      if (byDate !== 0) return byDate;
+
+      const ac = a.createdAt ?? '';
+      const bc = b.createdAt ?? '';
+      return bc.localeCompare(ac);
+    });
+  }
+
+  private ensureDefaultCategorySelected(): void {
+    if (!this.form.categoryId || !this.categories.some(c => c.id === this.form.categoryId)) {
+      this.form.categoryId = this.categories[0]?.id ?? '';
+    }
   }
 
   private newId(): string {

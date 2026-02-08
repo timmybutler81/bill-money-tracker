@@ -1,0 +1,82 @@
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h2 class="page-title">Dashboard</h2>
+      <p class="page-subtitle">Summary of income, expenses, and upcoming bills.</p>
+    </div>
+  </div>
+
+  <!-- KPI pills -->
+  <div class="pills">
+    <div class="pill"><span>Income</span><strong>{{ formatMoney(incomeTotal) }}</strong></div>
+    <div class="pill"><span>Expenses</span><strong>{{ formatMoney(expenseTotal) }}</strong></div>
+    <div class="pill"><span>Net Balance</span><strong>{{ formatMoney(netBalance) }}</strong></div>
+    <div class="pill"><span>Upcoming Bills</span><strong>{{ formatMoney(upcomingBillsTotal) }}</strong></div>
+  </div>
+
+  <!-- Reports (two cards side-by-side) -->
+  <div class="dash-grid">
+    <div class="surface">
+      <div class="row-between">
+        <h3 class="section-title">Top Spending Categories</h3>
+        <span class="text-muted">Expenses</span>
+      </div>
+
+      <div class="chart-box">
+        <canvas
+          #spendChart="base-chart"
+          baseChart
+          [data]="spendChartData"
+          [options]="spendChartOptions"
+          [type]="'doughnut'">
+        </canvas>
+      </div>
+    </div>
+
+    <div class="surface">
+      <div class="row-between">
+        <h3 class="section-title">Cashflow (Last 14 Days)</h3>
+        <span class="text-muted">Net</span>
+      </div>
+
+      <div class="chart-box">
+        <canvas
+          #cashflowChart="base-chart"
+          baseChart
+          [data]="cashflowChartData"
+          [options]="cashflowChartOptions"
+          [type]="'line'">
+        </canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Transactions -->
+  <div class="surface" style="margin-top: 12px;">
+    <h3 class="section-title">Recent Transactions</h3>
+
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Category</th>
+            <th class="text-right">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let t of recentTransactions">
+            <td>{{ t.date }}</td>
+            <td>{{ t.description || '—' }}</td>
+            <td>{{ categoryName(t.categoryId) }}</td>
+            <td class="text-right">{{ formatMoney(t.amount) }}</td>
+          </tr>
+          <tr *ngIf="recentTransactions.length === 0">
+            <td colspan="4" class="text-muted">No transactions yet.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

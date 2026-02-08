@@ -6,17 +6,90 @@
     </div>
   </div>
 
-  <div class="pills">
-    <div class="pill">
-      <span>Count</span>
-      <strong>{{ transactions.length }}</strong>
+  <!-- FILTER BAR (above pills) -->
+  <div class="surface" style="margin-bottom: 12px;">
+    <div class="row-between">
+      <h3 class="section-title" style="margin: 0;">Filters</h3>
+      <button class="btn" type="button" (click)="clearFilters()">Clear</button>
     </div>
-    <div class="pill">
-      <span>Total</span>
-      <strong>{{ total() | currency }}</strong>
+
+    <div class="form-grid">
+      <!-- Start date -->
+      <mat-form-field appearance="outline">
+        <mat-label>Start date</mat-label>
+        <input
+          matInput
+          type="date"
+          [(ngModel)]="filters.startDate"
+          (ngModelChange)="onFiltersChanged()"
+          name="startDate"
+        />
+      </mat-form-field>
+
+      <!-- End date -->
+      <mat-form-field appearance="outline">
+        <mat-label>End date</mat-label>
+        <input
+          matInput
+          type="date"
+          [(ngModel)]="filters.endDate"
+          (ngModelChange)="onFiltersChanged()"
+          name="endDate"
+        />
+      </mat-form-field>
+
+      <!-- Category -->
+      <mat-form-field appearance="outline">
+        <mat-label>Category</mat-label>
+        <mat-select
+          [(ngModel)]="filters.categoryId"
+          (ngModelChange)="onFiltersChanged()"
+          name="filterCategoryId"
+        >
+          <mat-option value="">All</mat-option>
+          <mat-option *ngFor="let c of categories" [value]="c.id">
+            {{ c.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Search -->
+      <mat-form-field appearance="outline">
+        <mat-label>Search by name</mat-label>
+        <input
+          matInput
+          [(ngModel)]="filters.search"
+          (ngModelChange)="onFiltersChanged()"
+          name="search"
+        />
+      </mat-form-field>
     </div>
   </div>
 
+  <!-- Pills (filtered) -->
+  <div class="pills">
+    <div class="pill">
+      <span>Count</span>
+      <strong>{{ filteredTransactions.length }}</strong>
+    </div>
+
+    <div class="pill">
+      <span>Income</span>
+      <strong>{{ incomeTotal | currency }}</strong>
+    </div>
+
+    <div class="pill">
+      <span>Expenses</span>
+      <strong>{{ expenseTotal | currency }}</strong>
+    </div>
+
+    <div class="pill">
+      <span>Net</span>
+      <strong>{{ netBalance | currency }}</strong>
+    </div>
+  </div>
+
+  <!-- Add transaction -->
   <mat-accordion>
     <mat-expansion-panel>
       <mat-expansion-panel-header>
@@ -61,12 +134,7 @@
 
         <mat-form-field appearance="outline" class="span-4">
           <mat-label>Description</mat-label>
-          <input
-            matInput
-            [(ngModel)]="form.description"
-            name="description"
-            placeholder="Optional note"
-          />
+          <input matInput [(ngModel)]="form.description" name="description" />
         </mat-form-field>
 
         <div class="span-4">
@@ -82,43 +150,44 @@
     </mat-expansion-panel>
   </mat-accordion>
 
+  <!-- Table -->
   <mat-card>
     <div class="section-title">Recent</div>
 
     <div class="table-wrap">
-    <table class="table" *ngIf="transactions.length > 0; else empty">
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Category</th>
-          <th>Description</th>
-          <th>Method</th>
-          <th>Recurring?</th>
-          <th class="text-right">Amount</th>
-          <th class="text-right">Actions</th>
-        </tr>
-      </thead>
+      <table class="table" *ngIf="filteredTransactions.length > 0; else empty">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Method</th>
+            <th>Recurring?</th>
+            <th class="text-right">Amount</th>
+            <th class="text-right">Actions</th>
+          </tr>
+        </thead>
 
-      <tbody>
-        <tr *ngFor="let t of transactions; trackBy: trackById">
-          <td>{{ t.date }}</td>
-          <td>{{ categoryName(t.categoryId) }}</td>
-          <td>{{ t.description || '-' }}</td>
-          <td>{{ t.paymentMethod }}</td>
-          <td>{{ t.isRecurringInstance ? 'Yes' : 'No' }}</td>
-          <td class="text-right">{{ t.amount | currency }}</td>
-          <td class="text-right">
-            <button mat-stroked-button color="warn" (click)="delete(t.id)">
-              Delete
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+        <tbody>
+          <tr *ngFor="let t of filteredTransactions; trackBy: trackById">
+            <td>{{ t.date | date:'MM/dd/yyyy' }}</td>
+            <td>{{ categoryName(t.categoryId) }}</td>
+            <td>{{ t.description || '-' }}</td>
+            <td>{{ t.paymentMethod }}</td>
+            <td>{{ t.isRecurringInstance ? 'Yes' : 'No' }}</td>
+            <td class="text-right">{{ t.amount | currency }}</td>
+            <td class="text-right">
+              <button mat-stroked-button color="warn" (click)="delete(t.id)">
+                Delete
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
     <ng-template #empty>
-      <p class="text-muted">No transactions yet.</p>
+      <p class="text-muted">No transactions match your filters.</p>
     </ng-template>
   </mat-card>
 </div>

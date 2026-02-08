@@ -38,49 +38,61 @@ import { MatSidenav } from '@angular/material/sidenav';
 
 export class Shell {
   @ViewChild('drawer') drawer!: MatSidenav;
-  isHandset$!: Observable<boolean>;
+
   user$!: Observable<User | null>;
 
+  // 👇 boolean for imperative logic (click handlers)
+  isHandset = false;
+
+  // 👇 observable for template bindings (async pipe)
+  isHandset$: Observable<boolean>;
+
   constructor(
-  private breakpointObserver: BreakpointObserver,
-  public auth: AuthService,
-  private router: Router
-) {
-  this.isHandset$ = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
-    map((result) => result.matches),
-    shareReplay()
-  );
+    private breakpointObserver: BreakpointObserver,
+    public auth: AuthService,
+    private router: Router
+  ) {
+    // SINGLE source of truth
+    this.isHandset$ = this.breakpointObserver
+      .observe('(max-width: 900px)')
+      .pipe(
+        map(result => result.matches),
+        shareReplay(1)
+      );
 
-  this.user$ = this.auth.user$;
-  this.auth.user$
-  .pipe(
-    filter((user) => user === null),
-    takeUntilDestroyed()
-  )
-  .subscribe(() => {
-    this.router.navigateByUrl('/login');
-  });
-}
+    // Sync observable → boolean
+    this.isHandset$
+      .pipe(takeUntilDestroyed())
+      .subscribe(isHandset => {
+        this.isHandset = isHandset;
+      });
 
-onAvatarError(evt: Event) {
-  const img = evt.target as HTMLImageElement;
-  img.style.display = 'none';
-}
+    this.user$ = this.auth.user$;
 
-logout() {
-  this.auth.logout();
-}
+    this.auth.user$
+      .pipe(
+        filter(user => user === null),
+        takeUntilDestroyed()
+      )
+      .subscribe(() => {
+        this.router.navigateByUrl('/login');
+      });
+  }
 
-async onLogout() {
-  await this.auth.logout();
-  await this.router.navigateByUrl('/login');
-}
+  closeIfHandset(drawer: MatSidenav): void {
+    if (this.isHandset) {
+      drawer.close();
+    }
+  }
 
-async closeIfHandset(): Promise<void> {
-  const isHandset = await firstValueFrom(this.isHandset$);
-  if (isHandset) {
-    this.drawer.close();
+  onAvatarError(evt: Event) {
+    const img = evt.target as HTMLImageElement;
+    img.style.display = 'none';
+  }
+
+  async onLogout() {
+    await this.auth.logout();
+    await this.router.navigateByUrl('/login');
   }
 }
 
-}

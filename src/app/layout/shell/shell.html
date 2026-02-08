@@ -10,24 +10,34 @@
     </div>
 
     <mat-nav-list>
-      <a mat-list-item routerLink="/dashboard" (click)="closeIfHandset()">
-        <mat-icon>dashboard</mat-icon><span>Dashboard</span>
+      <a mat-list-item routerLink="/dashboard" 
+        (click)="closeIfHandset(drawer)">
+        <mat-icon>dashboard</mat-icon>
+        <span>Dashboard</span>
       </a>
 
-      <a mat-list-item routerLink="/transactions" (click)="closeIfHandset()">
-        <mat-icon>receipt_long</mat-icon><span>Transactions</span>
+      <a mat-list-item routerLink="/transactions" 
+        (click)="closeIfHandset(drawer)">
+        <mat-icon>receipt_long</mat-icon>
+        <span>Transactions</span>
       </a>
 
-      <a mat-list-item routerLink="/categories" (click)="closeIfHandset()">
-        <mat-icon>category</mat-icon><span>Categories</span>
+      <a mat-list-item routerLink="/categories" 
+        (click)="closeIfHandset(drawer)">
+        <mat-icon>category</mat-icon>
+        <span>Categories</span>
       </a>
 
-      <a mat-list-item routerLink="/recurring-bills" (click)="closeIfHandset()">
-        <mat-icon>autorenew</mat-icon><span>Recurring Bills</span>
+      <a mat-list-item routerLink="/recurring-bills" 
+        (click)="closeIfHandset(drawer)">
+        <mat-icon>autorenew</mat-icon>
+        <span>Recurring Bills</span>
       </a>
 
-      <a mat-list-item routerLink="/reports" (click)="closeIfHandset()">
-        <mat-icon>bar_chart</mat-icon><span>Reports</span>
+      <a mat-list-item routerLink="/reports"
+        (click)="closeIfHandset(drawer)">
+        <mat-icon>bar_chart</mat-icon>
+        <span>Reports</span>
       </a>
     </mat-nav-list>
   </mat-sidenav>

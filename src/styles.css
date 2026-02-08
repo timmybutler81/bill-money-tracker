@@ -1,88 +1,36 @@
+/* =========================================================
+   01) THEME TOKENS (COLORS + TYPOGRAPHY)
+   ========================================================= */
 :root {
   --app-bg: #0B1220;
   --surface: #1E293B;
   --surface-2: #020617;
 
-  --text: #E5E7EB;
-  --muted: #9CA3AF;
+  /* "All brightness the same (White)" */
+  --text: #FFFFFF;
+  --muted: #FFFFFF;
+
   --border: #334155;
-
   --primary: #3B82F6;
+
+  --font: Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
-html, body {
-  height: 100%;
-}
+/* =========================================================
+   02) BASE / RESET
+   ========================================================= */
+html, body { height: 100%; }
 
 body {
   margin: 0;
-  font-family: Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
   background: var(--app-bg);
   color: var(--text);
+  font-family: var(--font);
 }
 
-.mat-mdc-card {
-  background: var(--surface) !important;
-  color: var(--text) !important;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-}
-
-.mat-mdc-menu-panel,
-.mat-mdc-select-panel,
-.mat-mdc-dialog-container {
-  background: var(--surface) !important;
-  color: var(--text) !important;
-}
-
-a {
-  text-decoration: none;
-  color: inherit;
-}
-
-.page-title {
-  font-size: 22px;
-  font-weight: 600;
-  margin: 0 0 14px 0;
-  color: var(--text);
-}
-
-h1, h2, h3, h4, h5 {
-  color: var(--text);
-}
-
-.shell-sidenav {
-  --mdc-list-list-item-label-text-color: #E5E7EB;
-  --mdc-list-list-item-label-text-opacity: 1;
-
-  --mdc-list-list-item-leading-icon-color: #E5E7EB;
-  --mdc-list-list-item-leading-icon-opacity: 1;
-
-  --mdc-list-list-item-hover-label-text-color: #FFFFFF;
-  --mdc-list-list-item-hover-leading-icon-color: #FFFFFF;
-
-  --mdc-list-list-item-focus-label-text-color: #FFFFFF;
-  --mdc-list-list-item-focus-leading-icon-color: #FFFFFF;
-}
-
-.shell-sidenav .mdc-list-item__primary-text {
-  color: #E5E7EB !important;
-  opacity: 1 !important;
-}
-
-.mat-mdc-menu-panel .mat-mdc-menu-item,
-.mat-mdc-menu-panel .mat-mdc-menu-item .mdc-list-item__primary-text,
-.mat-mdc-menu-panel .mat-mdc-menu-item .mat-icon {
-  color: var(--text) !important;
-  opacity: 1 !important;
-}
-
-.mat-mdc-menu-panel .mat-mdc-menu-item .mdc-list-item__primary-text {
-  opacity: 1 !important;
-}
-
+/* Force the font everywhere (including Material/MDC internals) */
 :root, body, button, input, textarea, select {
-  font-family: Inter, Roboto, "Helvetica Neue", Arial, sans-serif !important;
+  font-family: var(--font) !important;
 }
 
 .mdc-typography,
@@ -91,19 +39,28 @@ h1, h2, h3, h4, h5 {
 .mat-mdc-menu-item,
 .mat-mdc-card,
 .mat-mdc-form-field,
-.mat-mdc-list-item {
-  font-family: Inter, Roboto, "Helvetica Neue", Arial, sans-serif !important;
+.mat-mdc-list-item,
+.mat-mdc-option,
+.mat-mdc-select,
+.mat-mdc-checkbox,
+.mat-mdc-radio-button,
+.mat-mdc-slide-toggle {
+  font-family: var(--font) !important;
+  color: var(--text) !important;
+  opacity: 1 !important;
 }
 
-.avatar {
-  width: 34px;
-  height: 34px;
-  border-radius: 999px;
-  object-fit: cover;
-  border: 1px solid var(--border);
-  background: var(--surface);
-}
+a { text-decoration: none; color: inherit; }
 
+h1, h2, h3, h4, h5 { color: var(--text); }
+
+/* Utility: even “muted” text is white per your request */
+.text-muted { color: var(--text) !important; opacity: 1 !important; }
+.text-right { text-align: right; }
+
+/* =========================================================
+   03) APP LAYOUT HELPERS
+   ========================================================= */
 .page {
   max-width: 1100px;
   margin: 0 auto;
@@ -118,9 +75,17 @@ h1, h2, h3, h4, h5 {
   margin-bottom: 14px;
 }
 
+.page-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0 0 14px 0;
+  color: var(--text);
+}
+
 .page-subtitle {
   margin: 6px 0 0;
-  color: var(--muted);
+  color: var(--text);
+  opacity: 1;
   font-size: 14px;
 }
 
@@ -129,6 +94,7 @@ h1, h2, h3, h4, h5 {
   border: 1px solid var(--border);
   border-radius: 14px;
   padding: 16px;
+  color: var(--text);
 }
 
 .section-title {
@@ -138,6 +104,29 @@ h1, h2, h3, h4, h5 {
   color: var(--text);
 }
 
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 12px 0;
+}
+
+.stack > * + * { margin-top: 12px; }
+.row { display: flex; align-items: center; gap: 12px; }
+.row-between { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.row-end { display: flex; align-items: center; justify-content: flex-end; gap: 12px; }
+
+.avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  object-fit: cover;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+/* =========================================================
+   04) PILLS + BUTTONS
+   ========================================================= */
 .pills {
   display: flex;
   flex-wrap: wrap;
@@ -153,10 +142,12 @@ h1, h2, h3, h4, h5 {
   border: 1px solid var(--border);
   border-radius: 999px;
   background: color-mix(in srgb, var(--surface) 75%, var(--surface-2) 25%);
+  color: var(--text);
 }
 
 .pill span {
-  color: var(--muted);
+  color: var(--text);
+  opacity: 1;
   font-size: 12px;
 }
 
@@ -164,62 +155,6 @@ h1, h2, h3, h4, h5 {
   color: var(--text);
   font-size: 13px;
 }
-
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
-  margin: 12px 0;
-}
-
-.span-2 { grid-column: span 2; }
-.span-3 { grid-column: span 3; }
-.span-4 { grid-column: span 4; }
-
-@media (max-width: 900px) {
-  .form-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 520px) {
-  .form-grid {
-    grid-template-columns: 1fr;
-  }
-  .span-2, .span-3, .span-4 { grid-column: span 1; }
-}
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  overflow: hidden;
-  background: var(--surface);
-}
-
-.table th,
-.table td {
-  padding: 12px 12px;
-  border-bottom: 1px solid var(--border);
-  text-align: left;
-  vertical-align: top;
-}
-
-.table th {
-  font-size: 12px;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  color: var(--muted);
-  background: color-mix(in srgb, var(--surface) 70%, var(--surface-2) 30%);
-}
-
-.table tr:last-child td {
-  border-bottom: none;
-}
-
-.text-right { text-align: right; }
-.text-muted { color: var(--muted); }
 
 .btn {
   display: inline-flex;
@@ -232,6 +167,7 @@ h1, h2, h3, h4, h5 {
   background: var(--surface);
   color: var(--text);
   cursor: pointer;
+  font-family: var(--font) !important;
 }
 
 .btn-primary {
@@ -244,27 +180,131 @@ h1, h2, h3, h4, h5 {
   background: color-mix(in srgb, #ef4444 15%, var(--surface) 85%);
 }
 
-.mat-mdc-form-field {
+/* =========================================================
+   05) TABLES
+   ========================================================= */
+.table-wrap {
   width: 100%;
+  overflow-x: auto;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--surface);
 }
 
-.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__leading,
-.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__notch,
-.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__trailing {
-  border-color: var(--border) !important;
+.table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  border: none;
+  background: var(--surface);
+  color: var(--text);
 }
 
-.divider {
-  height: 1px;
-  background: var(--border);
+.table th,
+.table td {
+  padding: 12px 12px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+  color: var(--text) !important;
+  opacity: 1 !important;
+}
+
+.table th {
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--text) !important;
+  opacity: 1 !important;
+  background: color-mix(in srgb, var(--surface) 70%, var(--surface-2) 30%);
+}
+
+.table tr:last-child td { border-bottom: none; }
+
+.table tbody tr:hover td {
+  background: color-mix(in srgb, var(--primary) 10%, var(--surface) 90%);
+}
+
+@media (max-width: 600px) {
+  .table th, .table td {
+    padding: 10px 10px;
+    font-size: 13px;
+  }
+}
+
+/* =========================================================
+   06) FORMS (GRID HELPERS)
+   ========================================================= */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
   margin: 12px 0;
 }
 
-.stack > * + * { margin-top: 12px; }
-.row { display: flex; align-items: center; gap: 12px; }
-.row-between { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.row-end { display: flex; align-items: center; justify-content: flex-end; gap: 12px; }
+.span-2 { grid-column: span 2; }
+.span-3 { grid-column: span 3; }
+.span-4 { grid-column: span 4; }
 
+@media (max-width: 900px) {
+  .form-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 520px) {
+  .form-grid { grid-template-columns: 1fr; }
+  .span-2, .span-3, .span-4 { grid-column: span 1; }
+}
+
+/* =========================================================
+   07) ANGULAR MATERIAL - SURFACES (CARDS / MENUS / DIALOGS)
+   ========================================================= */
+.mat-mdc-card {
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.mat-mdc-menu-panel,
+.mat-mdc-select-panel,
+.mat-mdc-dialog-container {
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--border);
+}
+
+/* =========================================================
+   08) ANGULAR MATERIAL - SIDENAV / LISTS / MENUS
+   ========================================================= */
+.shell-sidenav {
+  --mdc-list-list-item-label-text-color: var(--text);
+  --mdc-list-list-item-label-text-opacity: 1;
+
+  --mdc-list-list-item-leading-icon-color: var(--text);
+  --mdc-list-list-item-leading-icon-opacity: 1;
+
+  --mdc-list-list-item-hover-label-text-color: var(--text);
+  --mdc-list-list-item-hover-leading-icon-color: var(--text);
+
+  --mdc-list-list-item-focus-label-text-color: var(--text);
+  --mdc-list-list-item-focus-leading-icon-color: var(--text);
+}
+
+.shell-sidenav .mdc-list-item__primary-text {
+  color: var(--text) !important;
+  opacity: 1 !important;
+}
+
+.mat-mdc-menu-panel .mat-mdc-menu-item,
+.mat-mdc-menu-panel .mat-mdc-menu-item .mdc-list-item__primary-text,
+.mat-mdc-menu-panel .mat-mdc-menu-item .mat-icon {
+  color: var(--text) !important;
+  opacity: 1 !important;
+}
+
+/* =========================================================
+   09) ANGULAR MATERIAL - EXPANSION PANEL
+   ========================================================= */
 .mat-expansion-panel {
   background: var(--surface) !important;
   color: var(--text) !important;
@@ -279,6 +319,7 @@ h1, h2, h3, h4, h5 {
 .mat-expansion-panel-header-title,
 .mat-expansion-panel-header-description {
   color: var(--text) !important;
+  opacity: 1 !important;
 }
 
 .mat-expansion-indicator::after {
@@ -289,11 +330,73 @@ h1, h2, h3, h4, h5 {
   border-radius: 14px !important;
 }
 
-mat-mdc-select-panel,
-.mat-mdc-menu-panel {
-  background: var(--surface) !important;
+/* =========================================================
+   10) ANGULAR MATERIAL - FORM FIELDS (INPUT / TEXTAREA)
+   ========================================================= */
+.mat-mdc-form-field { width: 100%; }
+
+/* Label (Amount, Description, etc.) */
+.mat-mdc-form-field .mdc-floating-label {
   color: var(--text) !important;
-  border: 1px solid var(--border);
+  opacity: 1 !important;
+  font-family: var(--font) !important;
+  font-weight: 500;
+}
+
+/* Input/textarea typed text */
+.mat-mdc-input-element,
+.mat-mdc-form-field input,
+.mat-mdc-form-field textarea {
+  color: var(--text) !important;
+  opacity: 1 !important;
+  font-family: var(--font) !important;
+}
+
+/* Placeholder text (make it white too, no dimming) */
+.mat-mdc-input-element::placeholder,
+.mat-mdc-form-field input::placeholder,
+.mat-mdc-form-field textarea::placeholder {
+  color: var(--text) !important;
+  opacity: 1 !important;
+  font-family: var(--font) !important;
+}
+
+/* Outline border */
+.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__leading,
+.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__notch,
+.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__trailing {
+  border-color: var(--border) !important;
+}
+
+.mdc-text-field--outlined:not(.mdc-text-field--disabled):hover .mdc-notched-outline__leading,
+.mdc-text-field--outlined:not(.mdc-text-field--disabled):hover .mdc-notched-outline__notch,
+.mdc-text-field--outlined:not(.mdc-text-field--disabled):hover .mdc-notched-outline__trailing {
+  border-color: var(--text) !important;
+}
+
+.mdc-text-field--focused .mdc-notched-outline__leading,
+.mdc-text-field--focused .mdc-notched-outline__notch,
+.mdc-text-field--focused .mdc-notched-outline__trailing {
+  border-color: var(--primary) !important;
+}
+
+/* =========================================================
+   11) ANGULAR MATERIAL - SELECT / OPTIONS
+   ========================================================= */
+.mat-mdc-select-value {
+  color: var(--text) !important;
+  opacity: 1 !important;
+}
+
+.mat-mdc-select-placeholder {
+  color: var(--text) !important;
+  opacity: 1 !important;
+}
+
+.mat-mdc-select-arrow,
+.mat-mdc-select-arrow svg {
+  color: var(--text) !important;
+  fill: var(--text) !important;
 }
 
 /* Option text */
@@ -303,83 +406,25 @@ mat-mdc-select-panel,
   opacity: 1 !important;
 }
 
-/* Option hover/focus/selected backgrounds for contrast */
+/* Option hover/focus/selected background */
 .mat-mdc-option:hover,
 .mat-mdc-option.mdc-list-item--selected,
 .mat-mdc-option.mdc-list-item--activated {
   background: color-mix(in srgb, var(--primary) 18%, var(--surface) 82%) !important;
 }
 
-/* Selected option text stays bright */
 .mat-mdc-option.mdc-list-item--selected .mdc-list-item__primary-text {
-  color: #fff !important;
-}
-
-.mat-mdc-form-field .mdc-floating-label {
-  color: var(--muted) !important;
-  opacity: 1 !important;
-}
-
-/* Input text */
-.mat-mdc-form-field input,
-.mat-mdc-form-field textarea {
-  color: var(--text) !important;
-}
-
-/* Placeholder text */
-.mat-mdc-form-field input::placeholder,
-.mat-mdc-form-field textarea::placeholder {
-  color: color-mix(in srgb, var(--muted) 85%, var(--text) 15%) !important;
-  opacity: 1 !important;
-}
-
-/* Select displayed value (the chosen item) */
-.mat-mdc-select-value {
-  color: var(--text) !important;
-}
-
-/* Select placeholder ("Select...") */
-.mat-mdc-select-placeholder {
-  color: var(--muted) !important;
-  opacity: 1 !important;
-}
-
-/* Dropdown arrow icon */
-.mat-mdc-select-arrow,
-.mat-mdc-select-arrow svg {
-  color: var(--muted) !important;
-  fill: var(--muted) !important;
-}
-
-.mat-expansion-panel {
-  background: var(--surface) !important;
-  color: var(--text) !important;
-  border: 1px solid var(--border);
-  border-radius: 14px !important;
-}
-
-.mat-expansion-panel-header-title,
-.mat-expansion-panel-header-description {
   color: var(--text) !important;
   opacity: 1 !important;
 }
 
-.table-wrap {
-  width: 100%;
-  overflow-x: auto;
-  border-radius: 14px;
-  border: 1px solid var(--border);
-  background: var(--surface);
-}
-
-.table {
-  min-width: 760px;
-  border: none;
-}
-
-@media (max-width: 600px) {
-  .table th, .table td {
-    padding: 10px 10px;
-    font-size: 13px;
-  }
+/* =========================================================
+   12) ANGULAR MATERIAL - CHECKBOX / RADIO / TOGGLE LABELS
+   ========================================================= */
+.mat-mdc-checkbox .mdc-label,
+.mat-mdc-radio-button .mdc-label,
+.mat-mdc-slide-toggle .mdc-label {
+  color: var(--text) !important;
+  opacity: 1 !important;
+  font-family: var(--font) !important;
 }
