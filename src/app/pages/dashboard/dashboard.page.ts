@@ -21,7 +21,6 @@ import { CategoryService } from '../../service/CategoryService';
 type CashflowRow = { date: string; income: number; expense: number; net: number };
 type CategorySpendRow = { categoryId: string; categoryName: string; amount: number };
 
-// Required for Chart.js v3/v4
 Chart.register(...registerables);
 
 @Component({
@@ -39,20 +38,16 @@ export class Dashboard implements OnInit {
   transactions: Transaction[] = [];
   recurringBills: RecurringBill[] = [];
 
-  // KPI pills
   incomeTotal = 0;
   expenseTotal = 0;
   netBalance = 0;
   upcomingBillsTotal = 0;
 
-  // Source report data
   topSpendingCategories: CategorySpendRow[] = [];
   cashflowLast14Days: CashflowRow[] = [];
 
-  // Recent Transactions preview
   recentTransactions: Transaction[] = [];
 
-  // Charts
   spendChartData: ChartData<'doughnut'> = {
     labels: [],
     datasets: [{ data: [] }],
@@ -96,20 +91,17 @@ export class Dashboard implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Categories (source of truth)
     this.categories = this.categoryService.getSnapshot();
     this.categoryService.categories$.subscribe((cats) => {
       this.categories = cats;
       this.recompute();
     });
 
-    // Initial render
     this.transactions = this.sortTransactions(this.txService.getTransactions());
     this.recentTransactions = this.transactions.slice(0, 10);
     this.recurringBills = this.billService.getSnapshot();
     this.recompute();
 
-    // Live updates
     this.txService.transactions$.subscribe((rows) => {
       this.transactions = this.sortTransactions(rows);
       this.recentTransactions = this.transactions.slice(0, 10);
@@ -147,7 +139,6 @@ export class Dashboard implements OnInit {
       return cat?.typeId === 'ct_income';
     };
 
-    // Include recurring instances by default (matches “what happened”)
     const baseTx = this.transactions;
 
     this.incomeTotal = baseTx
@@ -170,13 +161,11 @@ export class Dashboard implements OnInit {
   }
 
   private buildCharts(): void {
-    // Donut: top spending categories
     this.spendChartData = {
       labels: this.topSpendingCategories.map((x) => x.categoryName),
       datasets: [{ data: this.topSpendingCategories.map((x) => x.amount) }],
     };
 
-    // Line: net cashflow, chronological left->right
     const chronological = [...this.cashflowLast14Days].sort((a, b) =>
       a.date.localeCompare(b.date)
     );
@@ -186,7 +175,6 @@ export class Dashboard implements OnInit {
       datasets: [{ data: chronological.map((x) => x.net), label: 'Net' }],
     };
 
-    // Force repaint (helps when only labels change)
     queueMicrotask(() => {
       this.spendChart?.update();
       this.cashflowChart?.update();
@@ -256,7 +244,6 @@ export class Dashboard implements OnInit {
       row.net = row.income - row.expense;
     }
 
-    // newest-first (we re-sort for the chart)
     return [...buckets.values()].sort((a, b) => b.date.localeCompare(a.date));
   }
 

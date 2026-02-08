@@ -41,10 +41,8 @@ export class Shell {
 
   user$!: Observable<User | null>;
 
-  // 👇 boolean for imperative logic (click handlers)
   isHandset = false;
 
-  // 👇 observable for template bindings (async pipe)
   isHandset$: Observable<boolean>;
 
   constructor(
@@ -52,7 +50,6 @@ export class Shell {
     public auth: AuthService,
     private router: Router
   ) {
-    // SINGLE source of truth
     this.isHandset$ = this.breakpointObserver
       .observe('(max-width: 900px)')
       .pipe(
@@ -60,7 +57,6 @@ export class Shell {
         shareReplay(1)
       );
 
-    // Sync observable → boolean
     this.isHandset$
       .pipe(takeUntilDestroyed())
       .subscribe(isHandset => {

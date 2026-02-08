@@ -36,24 +36,19 @@ type PaymentMethodOption = { value: Transaction['paymentMethod']; label: string 
   styleUrls: ['./transactions.page.css'],
 })
 export class TransactionPage implements OnInit {
-  // Source data
   transactions: Transaction[] = [];
   categories: Category[] = [];
-
-  // Filtered view
   filteredTransactions: Transaction[] = [];
 
-  // Pills (based on filtered view)
   incomeTotal = 0;
   expenseTotal = 0;
   netBalance = 0;
 
-  // Filters (template-driven)
   filters = {
-    startDate: '' as string,   // ISO YYYY-MM-DD (from <input type="date">)
-    endDate: '' as string,     // ISO YYYY-MM-DD
-    categoryId: '' as string,  // '' = All
-    search: '' as string,      // description + category name
+    startDate: '' as string,
+    endDate: '' as string,
+    categoryId: '' as string,
+    search: '' as string,
   };
 
   paymentMethods: PaymentMethodOption[] = [
@@ -64,7 +59,6 @@ export class TransactionPage implements OnInit {
 
   private readonly userId = 'TODO_FROM_AUTH';
 
-  // Add Transaction form (keep ISO for <input type="date">)
   form = {
     date: this.todayIso(),
     amount: null as number | null,
@@ -80,7 +74,6 @@ export class TransactionPage implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Categories
     this.categories = this.categoryService.getSnapshot();
     this.ensureDefaultCategorySelected();
 
@@ -90,7 +83,6 @@ export class TransactionPage implements OnInit {
       this.applyFiltersAndRecompute();
     });
 
-    // Transactions
     this.transactions = this.sortTransactions(this.normalizeDates(this.txService.getTransactions()));
     this.applyFiltersAndRecompute();
 
@@ -149,7 +141,6 @@ export class TransactionPage implements OnInit {
     return t.id;
   }
 
-  // Total based on filtered view (so pills match filters)
   total(): number {
     return this.filteredTransactions.reduce((sum, t) => sum + t.amount, 0);
   }
@@ -158,9 +149,6 @@ export class TransactionPage implements OnInit {
     return n.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
   }
 
-  // -------------------------
-  // Filtering + Pills
-  // -------------------------
   private applyFiltersAndRecompute(): void {
     const start = this.filters.startDate?.trim() || '';
     const end = this.filters.endDate?.trim() || '';
@@ -168,7 +156,6 @@ export class TransactionPage implements OnInit {
     const q = (this.filters.search ?? '').trim().toLowerCase();
 
     this.filteredTransactions = this.transactions.filter((t) => {
-      // Dates are ISO internally, so string compare is safe
       if (start && t.date < start) return false;
       if (end && t.date > end) return false;
 
@@ -205,9 +192,6 @@ export class TransactionPage implements OnInit {
     this.netBalance = this.incomeTotal - this.expenseTotal;
   }
 
-  // -------------------------
-  // Date normalization (for mocks / mixed formats)
-  // -------------------------
   private normalizeDates(rows: Transaction[]): Transaction[] {
     return rows.map((t) => {
       const iso = this.toIsoDay(t.date);
@@ -215,41 +199,27 @@ export class TransactionPage implements OnInit {
     });
   }
 
-  /**
-   * Accepts:
-   *  - ISO: YYYY-MM-DD
-   *  - US:  MM/DD/YYYY
-   *  - Also tolerates: MM-DD-YYYY (your current mock has this)
-   * Returns ISO YYYY-MM-DD or '' if invalid.
-   */
   private toIsoDay(value: string): string {
     const v = (value ?? '').trim();
     if (!v) return '';
 
-    // Already ISO?
     if (/^\d{4}-\d{2}-\d{2}$/.test(v)) return v;
 
-    // MM/DD/YYYY
     let m = v.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
     if (m) {
       const mm = m[1], dd = m[2], yyyy = m[3];
       return `${yyyy}-${mm}-${dd}`;
     }
 
-    // MM-DD-YYYY (tolerate legacy mock)
     m = v.match(/^(\d{2})-(\d{2})-(\d{4})$/);
     if (m) {
       const mm = m[1], dd = m[2], yyyy = m[3];
       return `${yyyy}-${mm}-${dd}`;
     }
 
-    // Unknown format -> leave it alone (but it may not filter/sort right)
     return '';
   }
 
-  // -------------------------
-  // Helpers
-  // -------------------------
   private sortTransactions(rows: Transaction[]): Transaction[] {
     return [...rows].sort((a, b) => {
       const byDate = b.date.localeCompare(a.date);

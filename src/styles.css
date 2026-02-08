@@ -1,6 +1,4 @@
-/* =========================================================
-   01) THEME TOKENS (COLORS + TYPOGRAPHY)
-   ========================================================= */
+/* Themes */
 :root {
   --app-bg: #0B1220;
   --surface: #1E293B;
@@ -16,9 +14,7 @@
   --font: Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
-/* =========================================================
-   02) BASE / RESET
-   ========================================================= */
+/* Resets */
 html, body { height: 100%; }
 
 body {
@@ -28,7 +24,6 @@ body {
   font-family: var(--font);
 }
 
-/* Force the font everywhere (including Material/MDC internals) */
 :root, body, button, input, textarea, select {
   font-family: var(--font) !important;
 }
@@ -54,13 +49,10 @@ a { text-decoration: none; color: inherit; }
 
 h1, h2, h3, h4, h5 { color: var(--text); }
 
-/* Utility: even “muted” text is white per your request */
 .text-muted { color: var(--text) !important; opacity: 1 !important; }
 .text-right { text-align: right; }
 
-/* =========================================================
-   03) APP LAYOUT HELPERS
-   ========================================================= */
+/* Layout */
 .page {
   max-width: 1100px;
   margin: 0 auto;
@@ -124,9 +116,7 @@ h1, h2, h3, h4, h5 { color: var(--text); }
   background: var(--surface);
 }
 
-/* =========================================================
-   04) PILLS + BUTTONS
-   ========================================================= */
+/* Pills */
 .pills {
   display: flex;
   flex-wrap: wrap;
@@ -180,9 +170,7 @@ h1, h2, h3, h4, h5 { color: var(--text); }
   background: color-mix(in srgb, #ef4444 15%, var(--surface) 85%);
 }
 
-/* =========================================================
-   05) TABLES
-   ========================================================= */
+/* Tables */
 .table-wrap {
   width: 100%;
   overflow-x: auto;
@@ -232,9 +220,7 @@ h1, h2, h3, h4, h5 { color: var(--text); }
   }
 }
 
-/* =========================================================
-   06) FORMS (GRID HELPERS)
-   ========================================================= */
+/* Forms */
 .form-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -255,9 +241,7 @@ h1, h2, h3, h4, h5 { color: var(--text); }
   .span-2, .span-3, .span-4 { grid-column: span 1; }
 }
 
-/* =========================================================
-   07) ANGULAR MATERIAL - SURFACES (CARDS / MENUS / DIALOGS)
-   ========================================================= */
+/* Angular Overrides */
 .mat-mdc-card {
   background: var(--surface) !important;
   color: var(--text) !important;
@@ -273,9 +257,6 @@ h1, h2, h3, h4, h5 { color: var(--text); }
   border: 1px solid var(--border);
 }
 
-/* =========================================================
-   08) ANGULAR MATERIAL - SIDENAV / LISTS / MENUS
-   ========================================================= */
 .shell-sidenav {
   --mdc-list-list-item-label-text-color: var(--text);
   --mdc-list-list-item-label-text-opacity: 1;
@@ -302,9 +283,6 @@ h1, h2, h3, h4, h5 { color: var(--text); }
   opacity: 1 !important;
 }
 
-/* =========================================================
-   09) ANGULAR MATERIAL - EXPANSION PANEL
-   ========================================================= */
 .mat-expansion-panel {
   background: var(--surface) !important;
   color: var(--text) !important;
@@ -330,12 +308,8 @@ h1, h2, h3, h4, h5 { color: var(--text); }
   border-radius: 14px !important;
 }
 
-/* =========================================================
-   10) ANGULAR MATERIAL - FORM FIELDS (INPUT / TEXTAREA)
-   ========================================================= */
 .mat-mdc-form-field { width: 100%; }
 
-/* Label (Amount, Description, etc.) */
 .mat-mdc-form-field .mdc-floating-label {
   color: var(--text) !important;
   opacity: 1 !important;
@@ -343,7 +317,6 @@ h1, h2, h3, h4, h5 { color: var(--text); }
   font-weight: 500;
 }
 
-/* Input/textarea typed text */
 .mat-mdc-input-element,
 .mat-mdc-form-field input,
 .mat-mdc-form-field textarea {
@@ -352,7 +325,6 @@ h1, h2, h3, h4, h5 { color: var(--text); }
   font-family: var(--font) !important;
 }
 
-/* Placeholder text (make it white too, no dimming) */
 .mat-mdc-input-element::placeholder,
 .mat-mdc-form-field input::placeholder,
 .mat-mdc-form-field textarea::placeholder {
@@ -361,7 +333,6 @@ h1, h2, h3, h4, h5 { color: var(--text); }
   font-family: var(--font) !important;
 }
 
-/* Outline border */
 .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__leading,
 .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__notch,
 .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__trailing {
@@ -380,9 +351,6 @@ h1, h2, h3, h4, h5 { color: var(--text); }
   border-color: var(--primary) !important;
 }
 
-/* =========================================================
-   11) ANGULAR MATERIAL - SELECT / OPTIONS
-   ========================================================= */
 .mat-mdc-select-value {
   color: var(--text) !important;
   opacity: 1 !important;
@@ -399,14 +367,12 @@ h1, h2, h3, h4, h5 { color: var(--text); }
   fill: var(--text) !important;
 }
 
-/* Option text */
 .mat-mdc-option .mdc-list-item__primary-text,
 .mat-mdc-menu-item .mdc-list-item__primary-text {
   color: var(--text) !important;
   opacity: 1 !important;
 }
 
-/* Option hover/focus/selected background */
 .mat-mdc-option:hover,
 .mat-mdc-option.mdc-list-item--selected,
 .mat-mdc-option.mdc-list-item--activated {
@@ -418,9 +384,6 @@ h1, h2, h3, h4, h5 { color: var(--text); }
   opacity: 1 !important;
 }
 
-/* =========================================================
-   12) ANGULAR MATERIAL - CHECKBOX / RADIO / TOGGLE LABELS
-   ========================================================= */
 .mat-mdc-checkbox .mdc-label,
 .mat-mdc-radio-button .mdc-label,
 .mat-mdc-slide-toggle .mdc-label {
