@@ -23,7 +23,6 @@ import { MatSidenav } from '@angular/material/sidenav';
     CommonModule,
     RouterOutlet,
     RouterLink,
-    RouterLinkActive,
     LayoutModule,
     MatSidenavModule,
     MatToolbarModule,
