@@ -9,6 +9,10 @@ export class CategoryService {
 
   categories$: Observable<Category[]> = this.categoriesSubject.asObservable();
 
+  getAll$(): Observable<Category[]> {
+    return this.categories$;
+  }
+  
   getSnapshot(): Category[] {
     return this.categoriesSubject.value;
   }

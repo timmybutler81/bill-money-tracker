@@ -7,7 +7,7 @@ import { Dashboard } from './pages/dashboard/dashboard.page';
 import { TransactionPage } from './pages/transactions/transactions.page';
 import { CategoriesPage } from './pages/categories/categories.page';
 import { RecurringBillsPage } from './pages/recurring-bills/recurring-bills.page';
-import { Reports } from './pages/reports/reports';
+import { ReportsPage } from './pages/reports/reports.page';
 
 export const routes: Routes = [
   { path: 'login', component: Login },
@@ -21,7 +21,7 @@ export const routes: Routes = [
       { path: 'transactions', component: TransactionPage },
       { path: 'categories', component: CategoriesPage },
       { path: 'recurring-bills', component: RecurringBillsPage },
-      { path: 'reports', component: Reports },
+      { path: 'reports', component: ReportsPage },
 
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
     ],

@@ -1,0 +1,148 @@
+/* ============================= */
+/* Layout                         */
+/* ============================= */
+
+.reports-page {
+  display: grid;
+  gap: 16px;
+}
+
+/* ============================= */
+/* Header / Filters               */
+/* ============================= */
+
+.filters-card {
+  padding: 20px 24px;
+  border-radius: 14px;
+}
+
+.filters-card mat-card-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 16px;
+  row-gap: 12px;
+}
+
+.date-range {
+  min-width: 320px;
+  flex: 1;
+}
+
+.preset-buttons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* ============================= */
+/* Tabs – FORCE readable on dark  */
+/* ============================= */
+
+/* Give the tab header its own visible surface */
+::ng-deep .mat-mdc-tab-header {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.10) !important;
+  border-radius: 12px !important;
+  padding: 6px 8px !important;
+}
+
+/* Space the tab group a bit */
+::ng-deep .mat-mdc-tab-group {
+  margin-top: 10px !important;
+}
+
+/* Make sure the label element is bright (THIS is the key fix) */
+::ng-deep .mat-mdc-tab .mdc-tab__text-label {
+  color: rgba(255, 255, 255, 0.85) !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.2px !important;
+}
+
+/* Active tab label is pure white */
+::ng-deep .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+}
+
+/* Improve the indicator line */
+::ng-deep .mat-mdc-tab-indicator__content--underline {
+  border-color: #4f9cff !important; /* your accent */
+  border-width: 3px !important;
+  border-radius: 3px !important;
+}
+
+/* Remove any dark ripple overlays that can dim text */
+::ng-deep .mat-mdc-tab .mdc-tab__ripple::before,
+::ng-deep .mat-mdc-tab .mat-ripple-element {
+  opacity: 0 !important;
+}
+
+/* ============================= */
+/* Report cards                   */
+/* ============================= */
+
+.report-card {
+  border-radius: 14px;
+  padding: 18px 18px 14px;
+}
+
+.report-card mat-card-title {
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+/* ============================= */
+/* Summary blocks                 */
+/* ============================= */
+
+.summary-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 10px 0 16px;
+}
+
+.summary-item {
+  min-width: 180px;
+}
+
+.summary-item .label {
+  opacity: 0.80;
+  font-size: 12px;
+  margin-bottom: 2px;
+}
+
+.summary-item .value {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+/* ============================= */
+/* Table / Utilities              */
+/* ============================= */
+
+.w-100 {
+  width: 100%;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.chart-wrap {
+  height: 360px;
+}
+
+.hint {
+  margin-top: 10px;
+  opacity: 0.8;
+  font-size: 12px;
+}

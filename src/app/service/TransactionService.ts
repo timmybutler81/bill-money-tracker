@@ -11,6 +11,10 @@ export class TransactionService {
 
   transactions$: Observable<Transaction[]> = this.transactionsSubject.asObservable();
 
+  getAll$(): Observable<Transaction[]> {
+    return this.transactions$;
+  }
+
   getTransactions(): Transaction[] {
     return this.transactionsSubject.value;
   }

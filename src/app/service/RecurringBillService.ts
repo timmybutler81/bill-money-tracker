@@ -10,6 +10,10 @@ export class RecurringBillService {
 
   recurringBills$: Observable<RecurringBill[]> = this.billsSubject.asObservable();
 
+  getAll$(): Observable<RecurringBill[]> {
+    return this.recurringBills$;
+  }
+
   getSnapshot(): RecurringBill[] {
     return this.billsSubject.value;
   }
