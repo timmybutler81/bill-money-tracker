@@ -236,7 +236,7 @@ h1, h2, h3, h4, h5 { color: var(--text); }
   .form-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
-@media (max-width: 520px) {
+@media (max-width: 720px) {
   .form-grid { grid-template-columns: 1fr; }
   .span-2, .span-3, .span-4 { grid-column: span 1; }
 }
@@ -292,6 +292,14 @@ h1, h2, h3, h4, h5 { color: var(--text); }
 
 .mat-expansion-panel-header {
   padding: 0 16px !important;
+  background: var(--surface) !important;
+  color: var(--text) !important;
+}
+
+.mat-expansion-panel.mat-expanded .mat-expansion-panel-header,
+.mat-expansion-panel-header:hover,
+.mat-expansion-panel-header:focus {
+  background: var(--surface) !important;
 }
 
 .mat-expansion-panel-header-title,

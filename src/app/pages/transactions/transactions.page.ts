@@ -133,6 +133,10 @@ export class TransactionPage implements OnInit {
     this.txService.deleteTransaction(id);
   }
 
+  processRecurringCharges(): void {
+    this.toast('Process Recurring Charges is not hooked up yet.');
+  }
+
   categoryName(categoryId: string): string {
     return this.categories.find((c) => c.id === categoryId)?.name ?? 'Unknown';
   }
