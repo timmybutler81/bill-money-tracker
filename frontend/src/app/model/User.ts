@@ -1,8 +1,6 @@
-import { AuditFields } from './AuditFields.js'
+import { AuditFields } from './AuditFields';
 
 export interface User extends AuditFields {
-    id: string;
-    email: string;
-    authUser: string;
-
+  id: string;
+  firebaseUid: string;
 }

@@ -7,3 +7,9 @@ export interface Category extends AuditFields {
     alias?: string;
     typeId: string
 }
+
+export interface CreateCategoryInput {
+  name: string;
+  alias?: string;
+  typeId: string;
+}

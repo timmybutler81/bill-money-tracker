@@ -4,7 +4,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
-import { effect } from '@angular/core';
 
 @Component({
   selector: 'app-login',
@@ -15,13 +14,12 @@ import { effect } from '@angular/core';
 })
 export class Login {
   constructor(private auth: AuthService, private router: Router) {
-  effect(() => {
-    const user = this.auth.currentUser;
-    if (user) {
-      this.router.navigateByUrl('/dashboard');
-    }
-  });
-}
+    this.auth.user$.subscribe((user) => {
+      if (user) {
+        this.router.navigateByUrl('/dashboard');
+      }
+    });
+  }
 
   async signIn() {
     await this.auth.loginWithGoogle();
